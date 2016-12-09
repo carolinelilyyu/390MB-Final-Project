@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="mhlclient-2.2.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/edu.umass.cs.MHLClient/mhlclient/2.2.7/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/edu.umass.cs.MHLClient/mhlclient/2.2.7/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.umass.cs.MHLClient/mhlclient/2.2.7/3c3d3947ea49a06c18b7eef91debb1352b02d15c/mhlclient-2.2.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
