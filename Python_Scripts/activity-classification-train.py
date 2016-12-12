@@ -85,7 +85,7 @@ n_samples = 1000
 time_elapsed_seconds = (data[n_samples,0] - data[0,0]) / 1000
 sampling_rate = n_samples / time_elapsed_seconds
 
-feature_names = ["mean X", "mean Y", "mean Z", "min X", "min Y", "min Z", "max X", "max Y", "max Z", "median X", "median Y", "median Z", "standardDev X", "standardDev Y", "standardDev Z", "variance X", "variance Y", "variance Z", "mean magnitude"]
+feature_names = ["mean X", "mean Y", "mean Z", "min X", "min Y", "min Z", "max X", "max Y", "max Z", "median X", "median Y", "median Z", "standardDev X", "standardDev Y", "standardDev Z", "variance X", "variance Y", "variance Z", "mean magnitude", "peaks"]
 class_names = ["Stationary", "Walking"]
 
 print("Extracting features and labels for window size {} and step size {}...".format(window_size, step_size))
@@ -204,70 +204,7 @@ print("avg precision: {}".format(np.sum(overallPre)/len(overallPre)))
 print("avg recall: {}".format(np.sum(overallRe)/len(overallRe)))
 tree.fit(X,y)
 export_graphviz(tree, out_file='tree.dot', feature_names = feature_names)
-"""
-# TODO: Evaluate another classifier, i.e. SVM, Logistic Regression, k-NN, etc.
-cv = cross_validation.KFold(n, n_folds=10, shuffle=True, random_state=None)
-regression = LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='liblinear', max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
-overallAcc = []
-overallPre = []
-overallRe = []
-for i, (train_indexes, test_indexes) in enumerate(cv):
-    X_train = X[train_indexes, :]
-    y_train = y[train_indexes]
-    X_test = X[test_indexes, :]
-    y_test = y[test_indexes]
-    regression.fit(X_train, y_train)
-    y_pred = regression.predict(X_test)
 
-    conf = confusion_matrix(y_test, y_pred) #creation of confusion matrix
-
-    print("Fold {}".format(i))
-    print conf
-    total = 0.
-    correct = 0.
-    average = 0.
-    dimensions = conf.shape
-
-    for row in range(dimensions[0]):
-        correct = correct + conf[row][row]
-        for col in range(dimensions[1]):
-            total = total + (conf[row][col])
-        if total == 0:
-            average = 0
-        else:
-            average = correct/total
-
-    #this is recall --> col movement
-    for row in range(dimensions[0]):
-        totalCol = 0.
-        correct = conf[row][row]
-        for col in range(dimensions[1]):
-            totalCol = totalCol + (conf[row][col])
-        if totalCol == 0 :
-            tempRe = 0.
-        else:
-            tempRe = correct / totalCol
-        overallRe.append(tempRe)
-
-    #this is precision --> row movement
-    for col in range(dimensions[1]):
-        totalRow = 0.
-        totalRow = totalRow + correct
-        for row in range(dimensions[0]):
-            totalRow = totalRow + (conf[row][col])
-        if totalRow == 0 :
-            tempPre = 0.
-        else:
-            tempPre = correct / totalRow
-
-        overallPre.append(tempPre)
-    overallAcc.append(average)
-    print("\n")
-print("avg accuracy: {}".format(np.sum(overallAcc)/len(overallAcc)))
-print("avg precision: {}".format(np.sum(overallPre)/len(overallPre)))
-print("avg recall: {}".format(np.sum(overallRe)/len(overallRe)))
-regression.fit(X,y)
-"""
 # TODO: Once you have collected data, train your best model on the entire
 # dataset. Then save it to disk as follows:
 
