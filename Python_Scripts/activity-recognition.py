@@ -61,7 +61,8 @@ def predict(window):
     print("Buffer filled. Run your classifier.")
 
     # TODO: Predict class label
-    predict() #classifier
+    X = np.array(window)
+    activity = classifier.fit(X).labels_ #classifier
 
     onActivityDetected(activity)
     return

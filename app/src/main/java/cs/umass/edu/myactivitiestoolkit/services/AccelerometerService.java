@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -89,12 +90,15 @@ public class AccelerometerService extends SensorService implements SensorEventLi
 
     /** Sensor Manager object for registering and unregistering system sensors */
     private SensorManager mSensorManager;
+    private Sensor mPressure;
+
 
     /** Manages the physical accelerometer sensor on the phone. */
     private Sensor mAccelerometerSensor;
 
     /** Android built-in step detection sensor **/
     private Sensor mStepSensor;
+    private Sensor mLightSensor;
 
     /** Defines your step detection algorithm. **/
     private final StepDetector mStepDetector;
@@ -188,12 +192,14 @@ public class AccelerometerService extends SensorService implements SensorEventLi
         //mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         mStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         mSensorManager.registerListener(this, mAccelerometerSensor , SensorManager.SENSOR_DELAY_NORMAL);
         //TODO : (Assignment 1) Register your step detector. Register an OnStepListener to receive step events
         mSensorManager.registerListener(this, mStepSensor, SensorManager.SENSOR_DELAY_UI); //changed to ui?
         mSensorManager.registerListener(mStepDetector, mAccelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     /**
@@ -211,6 +217,9 @@ public class AccelerometerService extends SensorService implements SensorEventLi
 
         }if(mSensorManager!= null){
             mStepDetector.unregisterOnStepListeners();
+        }
+        if(mLightSensor != null){
+            mSensorManager.unregisterListener(this, mLightSensor);
         }
 
     }
@@ -259,7 +268,8 @@ public class AccelerometerService extends SensorService implements SensorEventLi
     Filter smoothingfilter = new Filter(10);
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float[] floatfilteredvalues= new float[4];
+
+        /*float[] floatfilteredvalues= new float[4];
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
             // convert the timestamp to milliseconds (note this is not in Unix time)
@@ -286,6 +296,29 @@ public class AccelerometerService extends SensorService implements SensorEventLi
 
         } else {
 
+            // cannot identify sensor type
+            Log.w(TAG, Constants.ERROR_MESSAGES.WARNING_SENSOR_NOT_SUPPORTED);
+
+        }*/
+        if(event.sensor.getType() == Sensor.TYPE_LIGHT){
+            long timestamp_in_milliseconds = (long) ((double) event.timestamp / Constants.TIMESTAMPS.NANOSECONDS_PER_MILLISECOND);
+            // 600UI/day
+            //10 to 15 minutes outside per day
+            long counter = 0;
+            long start = 0;
+            float prev = 0;
+            while (event.values[0] < 0){
+                if(prev != event.values[0]){
+                    start = timestamp_in_milliseconds;
+                    prev = event.values[0];
+                }
+                prev = event.values[0];
+            }
+            counter = timestamp_in_milliseconds - start;
+
+            long percent = counter/900000;
+        }
+        else {
             // cannot identify sensor type
             Log.w(TAG, Constants.ERROR_MESSAGES.WARNING_SENSOR_NOT_SUPPORTED);
 
@@ -357,5 +390,4 @@ public class AccelerometerService extends SensorService implements SensorEventLi
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         manager.sendBroadcast(intent);
     }
-
 }
