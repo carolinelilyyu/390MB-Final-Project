@@ -307,7 +307,7 @@ public class AccelerometerService extends SensorService implements SensorEventLi
             long counter = 0;
             long start = 0;
             float prev = 0;
-            while (event.values[0] < 0){
+            while ((event.values[0] < 90) || (event.values[0] > 70)){
                 if(prev != event.values[0]){
                     start = timestamp_in_milliseconds;
                     prev = event.values[0];
@@ -315,7 +315,6 @@ public class AccelerometerService extends SensorService implements SensorEventLi
                 prev = event.values[0];
             }
             counter = timestamp_in_milliseconds - start;
-
             long percent = counter/900000;
         }
         else {
