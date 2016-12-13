@@ -14,6 +14,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import cs.umass.edu.myactivitiestoolkit.R;
@@ -300,22 +302,36 @@ public class AccelerometerService extends SensorService implements SensorEventLi
             Log.w(TAG, Constants.ERROR_MESSAGES.WARNING_SENSOR_NOT_SUPPORTED);
 
         }*/
+        float prev = 0;
+        long percentage = 0;
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             long timestamp_in_milliseconds = (long) ((double) event.timestamp / Constants.TIMESTAMPS.NANOSECONDS_PER_MILLISECOND);
             // 600UI/day
             //10 to 15 minutes outside per day
-            long counter = 0;
-            long start = 0;
-            float prev = 0;
-            while ((event.values[0] < 90) || (event.values[0] > 70)){
-                if(prev != event.values[0]){
-                    start = timestamp_in_milliseconds;
-                    prev = event.values[0];
-                }
-                prev = event.values[0];
+            List<Long> indirectLight = new ArrayList<Long>();
+            List<Long> directLight = new ArrayList<Long>();
+            float current = event.values[0];
+            if(current >= 9500 && current <= 25500){
+                //indirect light measure -- scale of 1
+                indirectLight.add(timestamp_in_milliseconds);
+                prev = current;
             }
-            counter = timestamp_in_milliseconds - start;
-            long percent = counter/900000;
+            else if(current >= 31500 && current <= 100000){
+                //direct light measure -- scale 1.5
+                directLight.add(timestamp_in_milliseconds);
+                prev = current;
+            }
+
+            else{
+                long tempTimeIndirc = indirectLight.get(indirectLight.size() -1) - indirectLight.get(0);
+                long tempTimeDirc = directLight.get(directLight.size()-1) - directLight.get(0);
+                percentage = (long)(tempTimeDirc * 1.5 + tempTimeIndirc) / (long)90000;
+
+                //clearing all arrays for new set of readings
+                indirectLight.clear();
+                directLight.clear();
+            }
+
         }
         else {
             // cannot identify sensor type
