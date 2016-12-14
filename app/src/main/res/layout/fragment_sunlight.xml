@@ -11,6 +11,10 @@
     or as much as you please, e.g. you may want to add sliders for changing the clustering parameters.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
+=======
+    xmlns:tools="http://schemas.android.com/tools"
+>>>>>>> origin/master
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -45,6 +49,7 @@
             android:layout_marginStart="10dp"
             android:background="@drawable/ic_more_vert_black_48dp"/>
 
+<<<<<<< HEAD
     </FrameLayout>
 
 
@@ -79,5 +84,56 @@
                 android:gravity="center" />
         </RelativeLayout>
     </ScrollView>
+=======
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/light_sensor_reading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Illuminosity"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/DailyPercentage"
+                tools:text="@string/daily_percentage"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+
+            <TextView
+                android:text="@string/gps_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/GPS_Location"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <TextView
+        android:text="Sunlight"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/Sunlight"
+        android:layout_weight="0.09"
+        android:background="@color/ap_black"
+        android:gravity="center_vertical|center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/ap_white"
+        android:textSize="20sp" />
+
+>>>>>>> origin/master
 
 </LinearLayout>
