@@ -305,10 +305,8 @@ public class SunlightFragment extends Fragment{
                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
                         switch (permissions[i]) {
                             case Manifest.permission.ACCESS_COARSE_LOCATION:
-                                //TODO: Show status
                                 return;
                             case Manifest.permission.ACCESS_FINE_LOCATION:
-                                //TODO: Show status
                                 return;
                             default:
                                 return;
