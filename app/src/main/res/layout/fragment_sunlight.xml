@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    *** ASSIGNMENTS: Location Clustering ***
+
+    The location fragment will be used in the following assignment:
+
+        Location Clustering :   You will be required to show the location clusters on the map.
+                                This is done in the LocationsFragment, not here.
+
+    You may make any changes to this file to suit your needs. You may customize your UI as little
+    or as much as you please, e.g. you may want to add sliders for changing the clustering parameters.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        tools:context=".MapActivity" >
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btnToggleLocation"
+            android:layout_gravity="end|top"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_location_off_black_48dp"/>
+
+        <Button
+            android:id="@+id/btnMapsSettings"
+            android:layout_gravity="start|bottom"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_more_vert_black_48dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="@string/light_sensor_reading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Illuminosity"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/DailyPercentage"
+                tools:text="@string/daily_percentage"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+
+            <TextView
+                android:text="@string/gps_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/GPS_Location"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <TextView
+        android:text="Sunlight"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/Sunlight"
+        android:layout_weight="0.09"
+        android:background="@color/ap_black"
+        android:gravity="center_vertical|center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/ap_white"
+        android:textSize="20sp" />
+
+
+</LinearLayout>
