@@ -48,4 +48,7 @@
     <string name="text_switch_gps">Location</string>
 
     <string name="app_details">CS390MB : Mobile Health Sensing</string>
+    <string name="daily_percentage">Intake: %f</string>
+    <string name="light_sensor_reading">lx: %f</string>
+    <string name="gps_location">Location: (%f, %f)</string>
 </resources>

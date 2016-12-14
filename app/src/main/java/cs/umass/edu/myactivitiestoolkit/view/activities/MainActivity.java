@@ -24,6 +24,7 @@ import cs.umass.edu.myactivitiestoolkit.view.fragments.ExerciseFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.HeartRateFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.LocationsFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.SettingsFragment;
+import cs.umass.edu.myactivitiestoolkit.view.fragments.SunlightFragment;
 
 /**
  * The main activity is the entry point for the application. It is the primary UI and allows
@@ -121,7 +122,20 @@ public class MainActivity extends AppCompatActivity {
             public int getPageNumber() {
                 return 5;
             }
+        },
+        SUNLIGHT(SunlightFragment.class){
+            @Override
+            public String getTitle() {
+                return "Sunlight";
+            }
+
+            @Override
+            public int getPageNumber() {
+                return 6;
+            }
         };
+
+
 
         /**
          * Indicates the title of the page. This will be displayed in the tab.
