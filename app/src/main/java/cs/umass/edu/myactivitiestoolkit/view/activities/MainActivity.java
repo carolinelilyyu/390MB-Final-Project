@@ -24,6 +24,7 @@ import cs.umass.edu.myactivitiestoolkit.view.fragments.ExerciseFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.HeartRateFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.LocationsFragment;
 import cs.umass.edu.myactivitiestoolkit.view.fragments.SettingsFragment;
+import cs.umass.edu.myactivitiestoolkit.view.fragments.SunlightFragment;
 
 /**
  * The main activity is the entry point for the application. It is the primary UI and allows
@@ -121,6 +122,13 @@ public class MainActivity extends AppCompatActivity {
             public int getPageNumber() {
                 return 5;
             }
+        },
+        SUNLIGHT(SunlightFragment.class){
+            @Override
+            public String getTitle(){return "Sunlight";}
+
+            @Override
+            public int getPageNumber() {return 6;}
         };
 
         /**
@@ -318,6 +326,12 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case Constants.MESSAGE.BAND_SERVICE_STOPPED:
                             showStatus(getString(R.string.band_stopped));
+                            break;
+                        case Constants.MESSAGE.LIGHT_SERVICE_STARTED:
+                            showStatus("Light Service Started");
+                            break;
+                        case Constants.MESSAGE.LIGHT_SERVICE_STOPPED:
+                            showStatus("Light Service Stopped");
                             break;
                     }
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_STATUS)){
