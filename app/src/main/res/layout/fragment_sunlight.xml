@@ -52,7 +52,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:text="@string/Illuminosity"
+                android:text="@string/light_sensor_initial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/Illuminosity"
@@ -62,7 +62,7 @@
                 android:background="@color/ap_transparent" />
 
             <TextView
-                android:text="@string/dailyPercentage"
+                android:text="@string/daily_percentage_initial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/DailyPercentage"
@@ -71,7 +71,7 @@
                 android:background="@color/ap_transparent" />
 
             <TextView
-                android:text="@string/gps_locations"
+                android:text="@string/gps_location_initial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/GPS_Location"

@@ -207,7 +207,7 @@ public class SunlightFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.dailyPercentage)));
+                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_initial)));
             }
         });
     }
@@ -215,7 +215,7 @@ public class SunlightFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.Illuminosity)));
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_initial)));
             }
         });
     }
@@ -223,7 +223,7 @@ public class SunlightFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_locations)));
+                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_initial)));
             }
         });
     }
