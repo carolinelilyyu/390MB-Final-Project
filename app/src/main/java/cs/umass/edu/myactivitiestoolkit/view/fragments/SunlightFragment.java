@@ -49,9 +49,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 
 import cs.umass.edu.myactivitiestoolkit.R;
 import cs.umass.edu.myactivitiestoolkit.clustering.Cluster;
@@ -81,6 +83,7 @@ public class SunlightFragment extends Fragment{
     MapView mapView;
     private GoogleMap map;
     private final List<Marker> locationMarkers;
+    private final Queue<Number> Timestamps = new LinkedList<>();
     private boolean hideMarkers = false;
     private View btnToggleLocationService;
     private ServiceManager serviceManager;
@@ -109,7 +112,20 @@ public class SunlightFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sunlight, container, false);
         mProgress = (ProgressBar) rootView.findViewById(R.id.ProgressBar);
+        mProgress.setProgress(mProgressStatus);
         switchLight = (Switch) rootView.findViewById(R.id.switchLight);
+        switchLight.setChecked(serviceManager.isServiceRunning(LightService.class));
+        switchLight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean enabled) {
+                if (enabled){
+                    zoomInOnMarkers(100);
+
+                }else{
+                    serviceManager.stopSensorService(LightService.class);
+                }
+            }
+        });
 
         txtGPSLocation = (TextView) rootView.findViewById(R.id.GPS_Location);
         txtIlluminosity = (TextView) rootView.findViewById(R.id.Illuminosity);
@@ -128,18 +144,6 @@ public class SunlightFragment extends Fragment{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        switchLight.setChecked(serviceManager.isServiceRunning(AccelerometerService.class));
-        switchLight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean enabled) {
-                if (enabled){
-
-                }else{
-                    serviceManager.stopSensorService(LightService.class);
-                }
-            }
-        });
 
 
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -212,10 +216,27 @@ public class SunlightFragment extends Fragment{
         broadcastManager.registerReceiver(receiver, filter);
     }
 
+    public void onClick(View view) {
+        GPSLocation[] locations = getSavedLocations();
+        //Place a marker at each point and also adds it to the global list of markers
+        map.clear();
+        locationMarkers.clear();
+        if (!hideMarkers) {
+            for (GPSLocation loc : locations) {
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(loc.latitude, loc.longitude))//sets the latitude & longitude
+                        .title("At " + LocationDAO.getISOTimeString(loc.timestamp))); //display the time it occurred when clicked
+                locationMarkers.add(marker);
+                displayGPSLocation(loc.latitude, loc.longitude);
+            }
+        }
+    }
+
     /**
      * When the fragment stops, e.g. the user closes the application or opens a new activity,
      * then we should unregister the {@link #receiver}.
      */
+
     @Override
     public void onStop() {
         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getActivity());
@@ -227,7 +248,9 @@ public class SunlightFragment extends Fragment{
         super.onStop();
     }
 
-    private void displayIntake(final int intake){
+
+
+    private void displayIntake(final double intake){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -235,7 +258,7 @@ public class SunlightFragment extends Fragment{
             }
         });
     }
-    private void displayIlluminosity(final int lx){
+    private void displayIlluminosity(final double lx){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -243,19 +266,28 @@ public class SunlightFragment extends Fragment{
             }
         });
     }
-    private void displayGPSLocation(final int location){
+    private void displayGPSLocation(final double latitude, final double longitude){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_initial)));
+                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point), latitude, longitude));
             }
         });
+    }
+    public void zoomInOnMarkers(int padding){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : locationMarkers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        map.animateCamera(cu);
     }
     /**
      * Retrieves all locations saved in the local database.
      * @return a list of {@link GPSLocation}s.
      */
-    private GPSLocation[] getSavedLocations(){
+    private GPSLocation[] getSavedLocations() {
         LocationDAO dao = new LocationDAO(getActivity());
         try {
             dao.openRead();
@@ -265,11 +297,6 @@ public class SunlightFragment extends Fragment{
         }
     }
 
-    /**
-     * The receiver listens for messages from the {@link AccelerometerService}, e.g. was the
-     * service started/stopped, and updates the status views accordingly. It also
-     * listens for sensor data and displays the sensor readings to the user.
-     */
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -278,8 +305,9 @@ public class SunlightFragment extends Fragment{
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
                     if (message == Constants.MESSAGE.LOCATION_SERVICE_STARTED){
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
-                    } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED){
+                    } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED) {
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
+
                     }
                 }
             }

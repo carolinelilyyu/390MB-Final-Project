@@ -233,7 +233,7 @@ public class LocationsFragment extends Fragment {
                 if (!hideMarkers) {
                     for (GPSLocation loc : locations) {
                         Marker marker = map.addMarker(new MarkerOptions()
-                                .position(new LatLng(loc.latitude, loc.longitude)) //sets the latitude & longitude
+                                .position(new LatLng(loc.latitude, loc.longitude))//sets the latitude & longitude
                                 .title("At " + LocationDAO.getISOTimeString(loc.timestamp))); //display the time it occurred when clicked
                         locationMarkers.add(marker);
                     }

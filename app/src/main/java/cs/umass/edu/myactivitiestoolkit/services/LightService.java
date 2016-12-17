@@ -33,12 +33,15 @@ public class LightService extends SensorService implements SensorEventListener, 
 
     @Override
     protected void registerSensors() {
+        mSensorManager.registerListener(this, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
     @Override
     protected void unregisterSensors() {
-
+        if(mLightSensor != null){
+            mSensorManager.unregisterListener(this, mLightSensor);
+        }
     }
 
     @Override
@@ -85,6 +88,11 @@ public class LightService extends SensorService implements SensorEventListener, 
                 indirectLight.clear();
                 directLight.clear();
             }
+        }
+        else {
+            // cannot identify sensor type
+            Log.w(TAG, Constants.ERROR_MESSAGES.WARNING_SENSOR_NOT_SUPPORTED);
+
         }
     }
 
