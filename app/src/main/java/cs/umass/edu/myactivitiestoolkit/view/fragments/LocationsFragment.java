@@ -227,10 +227,6 @@ public class LocationsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 GPSLocation[] locations = getSavedLocations();
-                if (locations.length == 0){
-                    Toast.makeText(getActivity(), "No locations to cluster.", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 //Place a marker at each point and also adds it to the global list of markers
                 map.clear();
                 locationMarkers.clear();

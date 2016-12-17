@@ -7,10 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.ArrayMap;
@@ -20,9 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +61,10 @@ import cs.umass.edu.myactivitiestoolkit.location.FastConvexHull;
 import cs.umass.edu.myactivitiestoolkit.location.GPSLocation;
 import cs.umass.edu.myactivitiestoolkit.location.LocationDAO;
 import cs.umass.edu.myactivitiestoolkit.services.AccelerometerService;
+import cs.umass.edu.myactivitiestoolkit.services.LightService;
 import cs.umass.edu.myactivitiestoolkit.services.LocationService;
 import cs.umass.edu.myactivitiestoolkit.services.ServiceManager;
+import cs.umass.edu.myactivitiestoolkit.services.msband.BandService;
 import cs.umass.edu.myactivitiestoolkit.util.PermissionsUtil;
 import edu.umass.cs.MHLClient.client.MessageReceiver;
 import edu.umass.cs.MHLClient.client.MobileIOClient;
@@ -82,6 +89,9 @@ public class SunlightFragment extends Fragment{
     private TextView txtIlluminosity;
     private TextView txtGPSLocation;
     private TextView txtIntake;
+    private Switch switchLight;
+    private ProgressBar mProgress;
+    private int mProgressStatus = 0;
 
     public SunlightFragment(){
         locationMarkers = new ArrayList<>();
@@ -98,6 +108,8 @@ public class SunlightFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sunlight, container, false);
+        mProgress = (ProgressBar) rootView.findViewById(R.id.ProgressBar);
+        switchLight = (Switch) rootView.findViewById(R.id.switchLight);
 
         txtGPSLocation = (TextView) rootView.findViewById(R.id.GPS_Location);
         txtIlluminosity = (TextView) rootView.findViewById(R.id.Illuminosity);
@@ -116,6 +128,19 @@ public class SunlightFragment extends Fragment{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        switchLight.setChecked(serviceManager.isServiceRunning(AccelerometerService.class));
+        switchLight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean enabled) {
+                if (enabled){
+
+                }else{
+                    serviceManager.stopSensorService(LightService.class);
+                }
+            }
+        });
+
 
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -202,7 +227,6 @@ public class SunlightFragment extends Fragment{
         super.onStop();
     }
 
-    //displays to UI???
     private void displayIntake(final int intake){
         getActivity().runOnUiThread(new Runnable() {
             @Override
