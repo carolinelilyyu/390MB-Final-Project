@@ -270,7 +270,7 @@ public class SunlightFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point), latitude, longitude));
+                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point)));
             }
         });
     }
