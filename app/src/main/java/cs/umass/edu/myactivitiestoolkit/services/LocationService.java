@@ -112,6 +112,7 @@ public class LocationService extends SensorService implements LocationListener {
         mClient.sendSensorReading(new GPSReading(mUserID, "MOBILE", "", location.getTime(), location.getLatitude(), location.getLongitude()));
         final long time = SystemClock.uptimeMillis();
         final float accuracy = location.getAccuracy();
+        Log.d(TAG, "Accuracy in onLocationChanged: " + accuracy);
         broadcastAccuracyReading(time, accuracy);
         //to determine if you're inside a building by calling helper method
         Log.d(TAG, "Location Time: " + location.getTime()+ ", Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
@@ -124,7 +125,7 @@ public class LocationService extends SensorService implements LocationListener {
         intent.putExtra(Constants.KEY.TIMESTAMP, time);
         intent.putExtra(Constants.KEY.ACCURACY_DATA, accuracy);
         intent.setAction(Constants.ACTION.BROADCAST_ACCURACY_DATA);
-        //Log.d(TAG, "broadcasting! Intent: " + intent.getAction());
+        Log.d(TAG, "broadcasting! accuracy: " + accuracy);
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         manager.sendBroadcast(intent);
     }
