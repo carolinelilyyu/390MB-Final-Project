@@ -293,11 +293,6 @@ public class MainActivity extends AppCompatActivity {
         txtStatus.setText(message);
     }
 
-    private void updateUI(Intent intent){
-        String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
-        Log.d(TAG, "testing updateUI: " + lux);
-
-    }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -339,9 +334,6 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case Constants.MESSAGE.LIGHT_SERVICE_STARTED:
                             showStatus(getString(R.string.light_started));
-                            float intentlight = intent.getFloatExtra(Constants.KEY.LIGHT_DATA, -1);
-                            Log.d(TAG, "IntentLight in MainActivity:  " + intentlight);
-                            updateUI(intent);
                             break;
                         case Constants.MESSAGE.LIGHT_SERVICE_STOPPED:
                             showStatus(getString(R.string.light_stopped));

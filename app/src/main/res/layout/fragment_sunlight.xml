@@ -74,14 +74,16 @@
                 android:textSize="20sp"
                 android:background="@color/ap_transparent" />
 
+
             <TextView
-                android:text="@string/daily_percentage_initial"
+                android:text="@string/gps_accuracy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/DailyPercentage"
+                android:id="@+id/GPS_Accuracy"
                 android:gravity="center_horizontal"
                 android:textSize="20sp"
                 android:background="@color/ap_transparent" />
+
 
             <TextView
                 android:text="@string/gps_location_initial"
@@ -91,6 +93,17 @@
                 android:gravity="center_horizontal"
                 android:textSize="20sp"
                 android:background="@color/ap_transparent" />
+
+
+            <TextView
+                android:text="@string/daily_percentage_initial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/DailyPercentage"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:background="@color/ap_transparent" />
+
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"

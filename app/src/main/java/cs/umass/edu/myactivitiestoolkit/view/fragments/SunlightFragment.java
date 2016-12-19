@@ -30,6 +30,8 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
+
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -257,6 +259,12 @@ public class SunlightFragment extends Fragment{
         displayIlluminosity(lux);
     }
 
+    public void updateAccuracy(Intent intent){
+        String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+        displayGPSAccuracy(accuracy);
+
+    }
+
     private void displayIntake(final String intake){
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -273,14 +281,25 @@ public class SunlightFragment extends Fragment{
             }
         });
     }
+
+    private void displayGPSAccuracy(final String accuracy){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.gps_accuracy) +  accuracy));
+            }
+        });
+    }
+
     private void displayGPSLocation(final double latitude, final double longitude){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point), latitude, longitude));
+                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point) +  latitude + longitude));
             }
         });
     }
+
     public void zoomInOnMarkers(int padding){
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Marker marker : locationMarkers) {
@@ -311,10 +330,18 @@ public class SunlightFragment extends Fragment{
                 if (intent.getAction().equals(Constants.ACTION.BROADCAST_MESSAGE)){
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
                     if (message == Constants.MESSAGE.LOCATION_SERVICE_STARTED){
+                        updateAccuracy(intent);
+                        String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+                        Log.d(TAG, "Sun Fragment's accuracy: " + accuracy);
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
                     } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED) {
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
+                    }else if(message == Constants.MESSAGE.LIGHT_SERVICE_STARTED){
+                        updateLux(intent);
+                        String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+                        Log.d(TAG, "Sunlight Fragment's lux: " + lux);
                     }
+
                 }
             }
         }
