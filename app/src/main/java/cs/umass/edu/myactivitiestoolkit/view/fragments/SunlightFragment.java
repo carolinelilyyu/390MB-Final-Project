@@ -330,19 +330,22 @@ public class SunlightFragment extends Fragment{
                 if (intent.getAction().equals(Constants.ACTION.BROADCAST_MESSAGE)){
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
                     if (message == Constants.MESSAGE.LOCATION_SERVICE_STARTED){
-                        updateAccuracy(intent);
-                        String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
-                        Log.d(TAG, "Sunlight Fragment's accuracy: " + accuracy);
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
                     } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED) {
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
-                    }else if(message == Constants.MESSAGE.LIGHT_SERVICE_STARTED){
-                        updateLux(intent);
-                        String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
-                        Log.d(TAG, "Sunlight Fragment's lux: " + lux);
                     }
-
                 }
+                else if(intent.getAction().equals(Constants.ACTION.BROADCAST_LIGHT_DATA)){
+                    updateLux(intent);
+                    String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+                    Log.d(TAG, "Sunlight Fragment's lux: " + lux);
+                }else if(intent.getAction().equals(Constants.ACTION.BROADCAST_ACCURACY_DATA)){
+                    updateAccuracy(intent);
+                    String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+                    Log.d(TAG, "Sunlight Fragment's accuracy: " + accuracy);
+                }
+
+
             }
         }
     };
