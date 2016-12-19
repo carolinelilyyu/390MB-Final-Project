@@ -80,6 +80,7 @@ public class LocationService extends SensorService implements LocationListener {
     @Override
     protected void unregisterSensors() {
         //make sure we have permission to access location before requesting the sensor.
+        Log.d(TAG, "Stopping location manager");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

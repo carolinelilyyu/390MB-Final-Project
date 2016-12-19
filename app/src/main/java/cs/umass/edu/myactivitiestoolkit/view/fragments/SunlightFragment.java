@@ -332,7 +332,7 @@ public class SunlightFragment extends Fragment{
                     if (message == Constants.MESSAGE.LOCATION_SERVICE_STARTED){
                         updateAccuracy(intent);
                         String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
-                        Log.d(TAG, "Sun Fragment's accuracy: " + accuracy);
+                        Log.d(TAG, "Sunlight Fragment's accuracy: " + accuracy);
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
                     } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED) {
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
