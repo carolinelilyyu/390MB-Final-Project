@@ -191,8 +191,12 @@ public class SunlightFragment extends Fragment{
             public void onClick(View view) {
                 if (!serviceManager.isServiceRunning(LocationService.class)) {
                     requestPermissions();
+                }if(!serviceManager.isServiceRunning(LightService.class)){
+                    requestPermissions();
                 }else{
                     serviceManager.stopSensorService(LocationService.class);
+                    serviceManager.stopSensorService(LightService.class);
+
                 }
             }
         });
@@ -355,6 +359,7 @@ public class SunlightFragment extends Fragment{
             return;
         }
         onLocationPermissionGranted();
+        onLightPermissionGranted();
     }
 
     @Override
@@ -377,6 +382,7 @@ public class SunlightFragment extends Fragment{
                     }
                 }
                 onLocationPermissionGranted();
+                onLightPermissionGranted();
             }
         }
     }
@@ -388,6 +394,10 @@ public class SunlightFragment extends Fragment{
         serviceManager.startSensorService(LocationService.class);
     }
 
+
+    public void onLightPermissionGranted(){
+        serviceManager.startSensorService(LightService.class);
+    }
     private void clearLocations(){
         locationMarkers.clear();
     }
