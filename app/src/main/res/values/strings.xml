@@ -22,6 +22,8 @@
     <string name="ppg_stopped">PPG Stopped.</string>
     <string name="band_started">MS Band Service Started.</string>
     <string name="band_stopped">MS Band Service Stopped.</string>
+    <string name="light_started">Light Started.</string>
+    <string name="light_stopped">Light Stopped.</string>
 
     <string name="action_settings">Settings</string>
 
@@ -48,8 +50,8 @@
     <string name="text_switch_gps">Location</string>
 
     <string name="app_details">CS390MB : Mobile Health Sensing</string>
-    <string name="light_sensor_initial">lx: -</string>
-    <string name="daily_percentage_initial">Intake: 0</string>
+    <string name="light_sensor_initial">lx: </string>
+    <string name="daily_percentage_initial">Intake: </string>
     <string name="gps_location_initial">Location: (-,-)</string>
     <string name="light_switch" >SUNLIGHT</string>
     <string name="gps_location_point">Location (d, d)</string>

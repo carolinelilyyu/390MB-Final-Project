@@ -252,9 +252,12 @@ public class SunlightFragment extends Fragment{
         super.onStop();
     }
 
+    public void updateLux(Intent intent){
+        String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+        displayIlluminosity(lux);
+    }
 
-
-    private void displayIntake(final double intake){
+    private void displayIntake(final String intake){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -262,11 +265,11 @@ public class SunlightFragment extends Fragment{
             }
         });
     }
-    private void displayIlluminosity(final double lx){
+    private void displayIlluminosity(final String lx){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_initial)));
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_initial) +  lx));
             }
         });
     }
@@ -311,12 +314,13 @@ public class SunlightFragment extends Fragment{
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
                     } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED) {
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
-
                     }
                 }
             }
         }
     };
+
+
 
     @Override
     public void onResume() {

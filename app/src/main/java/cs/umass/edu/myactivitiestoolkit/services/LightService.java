@@ -17,6 +17,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs.umass.edu.myactivitiestoolkit.R;
 import cs.umass.edu.myactivitiestoolkit.constants.Constants;
 
 /**
@@ -33,7 +34,7 @@ public class LightService extends SensorService implements SensorEventListener{
         mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         mSensorManager.registerListener(this, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
+        broadcastMessage(Constants.MESSAGE.LIGHT_SERVICE_STARTED);
         Log.d(TAG, "Starting light manager");
 
     }
@@ -42,22 +43,24 @@ public class LightService extends SensorService implements SensorEventListener{
     protected void unregisterSensors() {
         if(mLightSensor != null){
             mSensorManager.unregisterListener(this, mLightSensor);
+            broadcastMessage(Constants.MESSAGE.LIGHT_SERVICE_STOPPED);
+            Log.d(TAG, "Stopping light manager");
         }
     }
 
     @Override
     protected int getNotificationID() {
-        return 0;
+        return Constants.NOTIFICATION_ID.LIGHT_SERVICE;
     }
 
     @Override
     protected String getNotificationContentText() {
-        return null;
+        return getString(R.string.light_service_notification);
     }
 
     @Override
     protected int getNotificationIconResourceID() {
-        return 0;
+        return R.drawable.ic_running_white_24dp;
     }
 
     @Override
@@ -75,10 +78,10 @@ public class LightService extends SensorService implements SensorEventListener{
 
     public void broadcastLightReading(final long time, final float lux) {
         Intent intent = new Intent();
-        intent.putExtra("time", time);
-        intent.putExtra("counter", lux);
-        sendBroadcast(intent);
-
+        intent.putExtra(Constants.KEY.TIMESTAMP, time);
+        intent.putExtra(Constants.KEY.LIGHT_DATA, lux);
+        intent.setAction(Constants.ACTION.BROADCAST_LIGHT_DATA);
+        //Log.d(TAG, "broadcasting! Intent: " + intent.getAction());
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         manager.sendBroadcast(intent);
     }

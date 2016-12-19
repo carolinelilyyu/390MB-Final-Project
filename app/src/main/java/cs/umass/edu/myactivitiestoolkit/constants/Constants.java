@@ -26,6 +26,8 @@ public class Constants {
         String START_SERVICE = "edu.umass.cs.my-activities-toolkit.action.start-service";
         String STOP_SERVICE = "edu.umass.cs.my-activities-toolkit.action.stop-service";
         String NAVIGATE_TO_APP = "edu.umass.cs.my-activities-toolkit.action.navigate-to-app";
+        String BROADCAST_LIGHT_DATA = "edu.umass.cs.my-activities-toolkit.action.broadcast-light-data";
+
     }
 
     /**
@@ -36,6 +38,7 @@ public class Constants {
         int PPG_SERVICE = 102;
         int LOCATION_SERVICE = 103;
         int AUDIO_SERVICE = 104;
+        int LIGHT_SERVICE = 105;
     }
 
     /** Keys to identify key-value data sent to/from the sensor service */
@@ -54,6 +57,8 @@ public class Constants {
         String ACCELEROMETER_PEAK_TIMESTAMP = "edu.umass.cs.my-activities-toolkit.key.accelerometer-peak-timestamp";
         String ACCELEROMETER_PEAK_VALUE = "edu.umass.cs.my-activities-toolkit.key.accelerometer-peak-value";
         String NOTIFICATION_ID = "edu.umass.cs.my-activities-toolkit.key.sensor-service-type";
+        String LIGHT_DATA = "edu.umass.cs.my-activities-toolkit.key.light-data";
+
     }
 
     /**
@@ -70,6 +75,8 @@ public class Constants {
         int PPG_SERVICE_STOPPED = 7;
         int BAND_SERVICE_STARTED = 8;
         int BAND_SERVICE_STOPPED = 9;
+        int LIGHT_SERVICE_STARTED = 10;
+        int LIGHT_SERVICE_STOPPED = 11;
     }
 
     /** Error/warning messages displayed to the user TODO: put into string resources */
