@@ -53,7 +53,7 @@
     <string name="light_sensor_initial">Lux: </string>
     <string name="daily_percentage_initial">Intake: </string>
     <string name="gps_location_initial">Location: </string>
-    <string name="gps_accuracy">Location Accuracy: </string>
+    <string name="gps_accuracy">Location Accuracy: %d</string>
     <string name="light_switch" >SUNLIGHT</string>
-    <string name="gps_location_point">Location (d, d)</string>
+    <string name="gps_location_point">Location (%d, %d)</string>
 </resources>
