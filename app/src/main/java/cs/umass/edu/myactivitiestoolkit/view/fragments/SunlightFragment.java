@@ -97,8 +97,8 @@ public class SunlightFragment extends Fragment{
     private Switch switchLight;
     private ProgressBar mProgress;
     private int mProgressStatus = 0;
-    public String publiclux;
-    public String publicaccuracy;
+    public double publiclux;
+    public double publicaccuracy;
     public boolean isInside;
     public int timeElapsed;
     public int timeOutside;
@@ -334,8 +334,8 @@ public class SunlightFragment extends Fragment{
     private void updateIntake(Intent intent){
         Log.d(TAG, "Accuracy: " + publicaccuracy);
         Log.d(TAG, "Lux: " + publiclux);
-        int intaccuracy = Integer.parseInt(publicaccuracy);
-        int intlux = Integer.parseInt(publiclux);
+        int intaccuracy = (int) (publicaccuracy);
+        int intlux = (int)(publiclux);
 
         if(intlux <= 500 && intaccuracy <= 30){
             Log.d(TAG, "inside!");
@@ -376,12 +376,12 @@ public class SunlightFragment extends Fragment{
                 }
                 else if(intent.getAction().equals(Constants.ACTION.BROADCAST_LIGHT_DATA)){
                     updateLux(intent);
-                    String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+                    double lux = intent.getDoubleExtra(Constants.KEY.LIGHT_DATA, 0);
                     Log.d(TAG, "Sunlight Fragment's lux: " + lux);
                     publiclux = lux;
                 }else if(intent.getAction().equals(Constants.ACTION.BROADCAST_ACCURACY_DATA)){
                     updateAccuracy(intent);
-                    String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+                    Double accuracy = intent.getDoubleExtra(Constants.KEY.ACCURACY_DATA,0);
                     Log.d(TAG, "Sunlight Fragment's accuracy: " + accuracy);
                     publicaccuracy = accuracy;
                     updateIntake(intent);

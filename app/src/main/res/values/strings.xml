@@ -55,9 +55,9 @@
 
     <string name="daily_percentage_initial">Intake: </string>
     <string name="gps_location_initial">Location: </string>
-    <string name="gps_accuracy" formatted="false">Location Accuracy: %d </string>
+    <string name="gps_accuracy" formatted="false">Location Accuracy: %f</string>
     <string name="light_switch" >SUNLIGHT</string>
-    <string name="gps_location_point" formatted="false">Location (%d, %d)</string>
+    <string name="gps_location_point" formatted="false">Location (%f, %f)</string>
     <string name="light_sensor_format" formatted="false">Lux: %d</string>
-    <string name="daily_percentage_format" formatted="false">Intake: %d</string>
+    <string name="daily_percentage_format" formatted="false">Intake: %f</string>
 </resources>
