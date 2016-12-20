@@ -81,7 +81,7 @@ public class LightService extends SensorService implements SensorEventListener{
         intent.putExtra(Constants.KEY.TIMESTAMP, time);
         intent.putExtra(Constants.KEY.LIGHT_DATA, lux);
         intent.setAction(Constants.ACTION.BROADCAST_LIGHT_DATA);
-        //Log.d(TAG, "broadcasting! Intent: " + intent.getAction());
+        Log.d(TAG, "broadcasting! Intent: " + intent.getAction());
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         manager.sendBroadcast(intent);
     }

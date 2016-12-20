@@ -97,6 +97,11 @@ public class SunlightFragment extends Fragment{
     private Switch switchLight;
     private ProgressBar mProgress;
     private int mProgressStatus = 0;
+    public String publiclux;
+    public String publicaccuracy;
+    public boolean isInside;
+    public int timeElapsed;
+    public int timeOutside;
 
     public SunlightFragment(){
         locationMarkers = new ArrayList<>();
@@ -107,6 +112,7 @@ public class SunlightFragment extends Fragment{
         super.onCreate(savedInstanceState);
         serviceManager = ServiceManager.getInstance(getActivity());
         userID = getString(R.string.mobile_health_client_user_id);
+        Log.d(TAG, userID);
         client = MobileIOClient.getInstance(userID);
     }
 
@@ -185,6 +191,7 @@ public class SunlightFragment extends Fragment{
         btnToggleLocationService = rootView.findViewById(R.id.btnToggleLocation);
         if (serviceManager.isServiceRunning(LocationService.class)) {
             btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
+            zoomInOnMarkers(100);
         } else {
             btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
         }
@@ -269,7 +276,7 @@ public class SunlightFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_initial)));
+                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_initial) + intake));
             }
         });
     }
@@ -323,10 +330,39 @@ public class SunlightFragment extends Fragment{
         }
     }
 
+    private void updateIntake(Intent intent){
+        Log.d(TAG, "Accuracy: " + publicaccuracy);
+        Log.d(TAG, "Lux: " + publiclux);
+        int intaccuracy = Integer.parseInt(publicaccuracy);
+        int intlux = Integer.parseInt(publiclux);
+
+        if(intlux <= 500 && intaccuracy <= 30){
+            Log.d(TAG, "inside!");
+            isInside = true;
+        }else{
+            Log.d(TAG, "outside!");
+            isInside = false;
+        }
+        if(!isInside){ //900000 milliseconds is 15 minutes
+            String time = intent.getStringExtra(Constants.KEY.TIMESTAMP);
+            int intTime = Integer.parseInt(time);
+            timeElapsed = intTime - timeOutside;
+            //step the bar up. divide the bar into 15 pieces. each piece being 60000 milliseconds, or a minute.
+            //add intTime to the timebar
+            if(timeElapsed == 60000){
+                //timeOutside increases by a minute
+                timeOutside++;
+            }
+        }
+        String stringtimeOutside = String.valueOf(timeOutside);
+        displayIntake(stringtimeOutside);
+    }
+
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null) {
+                Log.d(TAG, "intent's action: " + intent.getAction());
                 if (intent.getAction().equals(Constants.ACTION.BROADCAST_MESSAGE)){
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
                     if (message == Constants.MESSAGE.LOCATION_SERVICE_STARTED){
@@ -339,10 +375,13 @@ public class SunlightFragment extends Fragment{
                     updateLux(intent);
                     String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
                     Log.d(TAG, "Sunlight Fragment's lux: " + lux);
+                    publiclux = lux;
                 }else if(intent.getAction().equals(Constants.ACTION.BROADCAST_ACCURACY_DATA)){
                     updateAccuracy(intent);
                     String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
                     Log.d(TAG, "Sunlight Fragment's accuracy: " + accuracy);
+                    publicaccuracy = accuracy;
+                    updateIntake(intent);
                 }
 
 
