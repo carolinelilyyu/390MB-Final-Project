@@ -32,6 +32,7 @@
         android:theme="@style/AppTheme">
         <service android:name=".services.AccelerometerService" />
         <service android:name=".services.LocationService" />
+        <service android:name=".services.LightService" />
         <service android:name=".services.AudioService" />
         <service android:name=".services.PPGService" />
         <service android:name=".services.msband.BandService" />

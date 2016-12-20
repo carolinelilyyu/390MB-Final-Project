@@ -272,6 +272,9 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.NOTIFICATION_ID.PPG_SERVICE:
                     viewPager.setCurrentItem(PAGES.PPG_DATA.getPageNumber());
                     break;
+                case Constants.NOTIFICATION_ID.LIGHT_SERVICE:
+                    viewPager.setCurrentItem(PAGES.SUNLIGHT.getPageNumber());
+                    break;
             }
         }
     }
@@ -290,12 +293,14 @@ public class MainActivity extends AppCompatActivity {
         txtStatus.setText(message);
     }
 
+
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null) {
                 if (intent.getAction().equals(Constants.ACTION.BROADCAST_MESSAGE)){
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
+                    Log.d(TAG, ".key.message: " + message);
                     switch (message){
                         case Constants.MESSAGE.ACCELEROMETER_SERVICE_STARTED:
                             showStatus(getString(R.string.accelerometer_started));
@@ -327,13 +332,21 @@ public class MainActivity extends AppCompatActivity {
                         case Constants.MESSAGE.BAND_SERVICE_STOPPED:
                             showStatus(getString(R.string.band_stopped));
                             break;
+                        case Constants.MESSAGE.LIGHT_SERVICE_STARTED:
+                            showStatus(getString(R.string.light_started));
+                            break;
+                        case Constants.MESSAGE.LIGHT_SERVICE_STOPPED:
+                            showStatus(getString(R.string.light_stopped));
+                            break;
                     }
+
                 } else if (intent.getAction().equals(Constants.ACTION.BROADCAST_STATUS)){
                     String message = intent.getStringExtra(Constants.KEY.STATUS);
                     if (message != null) {
                         showStatus(message);
                     }
                 }
+
             }
         }
     };

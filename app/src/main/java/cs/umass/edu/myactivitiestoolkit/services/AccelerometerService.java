@@ -326,7 +326,6 @@ public class AccelerometerService extends SensorService implements SensorEventLi
                 long tempTimeIndirc = indirectLight.get(indirectLight.size() -1) - indirectLight.get(0);
                 long tempTimeDirc = directLight.get(directLight.size()-1) - directLight.get(0);
                 percentage = (long)(tempTimeDirc * 1.5 + tempTimeIndirc) / (long)90000;
-
                 //clearing all arrays for new set of readings
                 indirectLight.clear();
                 directLight.clear();

@@ -30,6 +30,8 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
+
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -95,6 +97,11 @@ public class SunlightFragment extends Fragment{
     private Switch switchLight;
     private ProgressBar mProgress;
     private int mProgressStatus = 0;
+    public String publiclux;
+    public String publicaccuracy;
+    public boolean isInside;
+    public int timeElapsed;
+    public int timeOutside;
 
     public SunlightFragment(){
         locationMarkers = new ArrayList<>();
@@ -105,6 +112,7 @@ public class SunlightFragment extends Fragment{
         super.onCreate(savedInstanceState);
         serviceManager = ServiceManager.getInstance(getActivity());
         userID = getString(R.string.mobile_health_client_user_id);
+        Log.d(TAG, userID);
         client = MobileIOClient.getInstance(userID);
     }
 
@@ -183,6 +191,7 @@ public class SunlightFragment extends Fragment{
         btnToggleLocationService = rootView.findViewById(R.id.btnToggleLocation);
         if (serviceManager.isServiceRunning(LocationService.class)) {
             btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
+            zoomInOnMarkers(100);
         } else {
             btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
         }
@@ -191,8 +200,12 @@ public class SunlightFragment extends Fragment{
             public void onClick(View view) {
                 if (!serviceManager.isServiceRunning(LocationService.class)) {
                     requestPermissions();
+                }if(!serviceManager.isServiceRunning(LightService.class)){
+                    requestPermissions();
                 }else{
                     serviceManager.stopSensorService(LocationService.class);
+                    serviceManager.stopSensorService(LightService.class);
+
                 }
             }
         });
@@ -248,32 +261,56 @@ public class SunlightFragment extends Fragment{
         super.onStop();
     }
 
+    public void updateLux(Intent intent){
+        String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+        displayIlluminosity(lux);
+    }
 
+    public void updateAccuracy(Intent intent){
+        String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+        displayGPSAccuracy(accuracy);
 
-    private void displayIntake(final double intake){
+    }
+
+    private void displayIntake(final String intake){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_initial)));
+                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_initial) + intake));
             }
         });
     }
-    private void displayIlluminosity(final double lx){
+    private void displayIlluminosity(final String lx){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_initial)));
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_initial) +  lx));
             }
         });
     }
+
+    private void displayGPSAccuracy(final String accuracy){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.gps_accuracy) +  accuracy));
+            }
+        });
+    }
+
     private void displayGPSLocation(final double latitude, final double longitude){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+<<<<<<< HEAD
                 txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point)));
+=======
+                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point) +  latitude + longitude));
+>>>>>>> origin/master
             }
         });
     }
+
     public void zoomInOnMarkers(int padding){
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Marker marker : locationMarkers) {
@@ -297,22 +334,66 @@ public class SunlightFragment extends Fragment{
         }
     }
 
+    private void updateIntake(Intent intent){
+        Log.d(TAG, "Accuracy: " + publicaccuracy);
+        Log.d(TAG, "Lux: " + publiclux);
+        int intaccuracy = Integer.parseInt(publicaccuracy);
+        int intlux = Integer.parseInt(publiclux);
+
+        if(intlux <= 500 && intaccuracy <= 30){
+            Log.d(TAG, "inside!");
+            isInside = true;
+        }else{
+            Log.d(TAG, "outside!");
+            isInside = false;
+        }
+        if(!isInside){ //900000 milliseconds is 15 minutes
+            String time = intent.getStringExtra(Constants.KEY.TIMESTAMP);
+            int intTime = Integer.parseInt(time);
+            timeElapsed = intTime - timeOutside;
+            //step the bar up. divide the bar into 15 pieces. each piece being 60000 milliseconds, or a minute.
+            //add intTime to the timebar
+            if(timeElapsed == 60000){
+                //timeOutside increases by a minute
+                timeOutside++;
+            }
+        }
+        String stringtimeOutside = String.valueOf(timeOutside);
+        displayIntake(stringtimeOutside);
+    }
+
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() != null) {
+                Log.d(TAG, "intent's action: " + intent.getAction());
                 if (intent.getAction().equals(Constants.ACTION.BROADCAST_MESSAGE)){
                     int message = intent.getIntExtra(Constants.KEY.MESSAGE, -1);
                     if (message == Constants.MESSAGE.LOCATION_SERVICE_STARTED){
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_on_black_48dp);
                     } else if (message == Constants.MESSAGE.LOCATION_SERVICE_STOPPED) {
                         btnToggleLocationService.setBackgroundResource(R.drawable.ic_location_off_black_48dp);
-
                     }
                 }
+                else if(intent.getAction().equals(Constants.ACTION.BROADCAST_LIGHT_DATA)){
+                    updateLux(intent);
+                    String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+                    Log.d(TAG, "Sunlight Fragment's lux: " + lux);
+                    publiclux = lux;
+                }else if(intent.getAction().equals(Constants.ACTION.BROADCAST_ACCURACY_DATA)){
+                    updateAccuracy(intent);
+                    String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+                    Log.d(TAG, "Sunlight Fragment's accuracy: " + accuracy);
+                    publicaccuracy = accuracy;
+                    updateIntake(intent);
+                }
+
+
             }
         }
     };
+
+
 
     @Override
     public void onResume() {
@@ -355,6 +436,7 @@ public class SunlightFragment extends Fragment{
             return;
         }
         onLocationPermissionGranted();
+        onLightPermissionGranted();
     }
 
     @Override
@@ -377,6 +459,7 @@ public class SunlightFragment extends Fragment{
                     }
                 }
                 onLocationPermissionGranted();
+                onLightPermissionGranted();
             }
         }
     }
@@ -388,6 +471,10 @@ public class SunlightFragment extends Fragment{
         serviceManager.startSensorService(LocationService.class);
     }
 
+
+    public void onLightPermissionGranted(){
+        serviceManager.startSensorService(LightService.class);
+    }
     private void clearLocations(){
         locationMarkers.clear();
     }
