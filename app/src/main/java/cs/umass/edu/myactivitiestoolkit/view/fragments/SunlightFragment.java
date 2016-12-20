@@ -131,6 +131,7 @@ public class SunlightFragment extends Fragment{
 
                 }else{
                     serviceManager.stopSensorService(LightService.class);
+                    switchLight.setChecked(false);
                 }
             }
         });
@@ -262,38 +263,38 @@ public class SunlightFragment extends Fragment{
     }
 
     public void updateLux(Intent intent){
-        String lux = intent.getStringExtra(Constants.KEY.LIGHT_DATA);
+        double lux = intent.getDoubleExtra(Constants.KEY.LIGHT_DATA,0);
         displayIlluminosity(lux);
     }
 
     public void updateAccuracy(Intent intent){
-        String accuracy = intent.getStringExtra(Constants.KEY.ACCURACY_DATA);
+        Double accuracy = intent.getDoubleExtra(Constants.KEY.ACCURACY_DATA,0);
         displayGPSAccuracy(accuracy);
 
     }
 
-    private void displayIntake(final String intake){
+    private void displayIntake(final double intake){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_initial) + intake));
+                txtIntake.setText(String.format(Locale.getDefault(), getString(R.string.daily_percentage_format), intake));
             }
         });
     }
-    private void displayIlluminosity(final String lx){
+    private void displayIlluminosity(final double lx){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_initial) +  lx));
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.light_sensor_format), lx));
             }
         });
     }
 
-    private void displayGPSAccuracy(final String accuracy){
+    private void displayGPSAccuracy(final double accuracy){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.gps_accuracy) +  accuracy));
+                txtIlluminosity.setText(String.format(Locale.getDefault(), getString(R.string.gps_accuracy), accuracy));
             }
         });
     }
@@ -302,11 +303,7 @@ public class SunlightFragment extends Fragment{
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-<<<<<<< HEAD
-                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point)));
-=======
-                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point) +  latitude + longitude));
->>>>>>> origin/master
+                txtGPSLocation.setText(String.format(Locale.getDefault(), getString(R.string.gps_location_point), latitude, longitude));
             }
         });
     }
@@ -358,8 +355,10 @@ public class SunlightFragment extends Fragment{
                 timeOutside++;
             }
         }
+        mProgressStatus = 100*timeOutside/900000;
+        mProgress.setProgress(mProgressStatus);
         String stringtimeOutside = String.valueOf(timeOutside);
-        displayIntake(stringtimeOutside);
+        displayIntake(timeOutside);
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {

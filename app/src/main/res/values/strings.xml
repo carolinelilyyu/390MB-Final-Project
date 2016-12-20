@@ -35,6 +35,7 @@
     <string name="local_step_count" formatted="false">Local: %d</string>
     <string name="server_step_count" formatted="false">Server: %d</string>
 
+
     <string name="speaker" formatted="false">Speaker: %s</string>
     <string name="speaker_initial">Speaker: None</string>
 
@@ -51,9 +52,12 @@
 
     <string name="app_details">CS390MB : Mobile Health Sensing</string>
     <string name="light_sensor_initial">Lux: </string>
+
     <string name="daily_percentage_initial">Intake: </string>
     <string name="gps_location_initial">Location: </string>
-    <string name="gps_accuracy">Location Accuracy: %d</string>
+    <string name="gps_accuracy" formatted="false">Location Accuracy: %d </string>
     <string name="light_switch" >SUNLIGHT</string>
-    <string name="gps_location_point">Location (%d, %d)</string>
+    <string name="gps_location_point" formatted="false">Location (%d, %d)</string>
+    <string name="light_sensor_format" formatted="false">Lux: %d</string>
+    <string name="daily_percentage_format" formatted="false">Intake: %d</string>
 </resources>
